@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Kael-felz/Tetris#readme",
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.11",
     "typescript": "^7.0.2",
     "vitest": "^4.1.11"
   },

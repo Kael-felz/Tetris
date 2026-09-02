@@ -94,4 +94,17 @@ describe("Tetris", () => {
     expect(game.getTablero().lineCount()).toBe(0);
     expect(game.state()).toBe("No iniciado");
   });
+
+  it("puede crear piezas L y Dog según el valor aleatorio", () => {
+    const random = vi.spyOn(Math, "random");
+    random.mockReturnValue(0.7);
+    const gameL = new Tetris();
+    gameL.start();
+    expect(gameL.getTablero().getCurrentPiece()?.getName()).toMatch(/^L-/);
+
+    random.mockReturnValue(0.8);
+    const gameDog = new Tetris();
+    gameDog.start();
+    expect(gameDog.getTablero().getCurrentPiece()?.getName()).toMatch(/^Dog-/);
+  });
 });
