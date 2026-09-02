@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Tablero } from "../../tetris/src/Tablero";
 import { Reloj } from "../../tetris/src/Reloj";
+import { PieceSquare } from "../../tetris/src/piezas/piezacuadrado";
 
 const make = () => new Tablero(new Reloj());
 
@@ -18,4 +19,39 @@ describe("Tablero", () => {
     expect(t.isGameOver()).toBe(false);
     expect(t.lineCount()).toBe(0);
   });
+ it("agrega, mueve y mantiene la pieza dentro del tablero", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    const t = make();
+    const p = new PieceSquare();
+    expect(t.addPiece(p)).toBe(true);
+    expect(t.getCurrentPiece()).toBe(p);
+    expect(t.getPieces()).toContain(p);
+    expect(t.getCurrentPosition().y).toBe(0);
+    expect(t.moveDown()).toBe(true);
+    expect(t.getCurrentPosition().y).toBe(1);
+    const xs = p.getBlocks().map((b) => b.x + t.getCurrentPosition().x);
+    expect(Math.min(...xs)).toBeGreaterThanOrEqual(0);
+    expect(Math.max(...xs)).toBeLessThan(t.getWidth());
+  });
 });
+
+  it("fija la pieza al llegar al fondo y elimina filas", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    const t = make();
+    const p = new PieceSquare();
+    t.addPiece(p);
+    (t as any).currentPosition = { x: 0, y: 18 };
+    expect(t.moveDown()).toBe(false);
+    expect(t.getCurrentPiece()).toBeNull();
+    expect(t.getCells()[19].some((c) => c === true)).toBe(true);
+
+    const t2 = make();
+    const cells = t2.getCells();
+    for (let x = 0; x < Tablero.WIDTH - 2; x++) cells[19][x] = true;
+    const q = new PieceSquare();
+    t2.addPiece(q);
+    (t2 as any).currentPosition = { x: Tablero.WIDTH - 2, y: 18 };
+    t2.moveDown();
+    expect(t2.lineCount()).toBe(1);
+    expect(t2.getCells().flat().filter((c) => c === true).length).toBe(2);
+  });
