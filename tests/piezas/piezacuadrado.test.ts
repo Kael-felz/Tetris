@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PieceSquare } from "../../src/pieces/piezacuadrado";
+import { PieceSquare } from "../../tetris/src/piezas/piezacuadrado";
 
 describe("PieceSquare", () => {
   it("tiene la forma de un cuadrado de 2x2", () => {
