@@ -7,7 +7,7 @@ import { PieceStick } from "./piezas/piezapalito";
 import { PieceL } from "./piezas/piezal";
 import { PieceDog } from "./piezas/piezaperro";
 
-export type GameState = "NOT_STARTED" | "PLAYING" | "FINISHED";
+export type GameState = "No iniciado" | "JUGANDO" | "FINALIZADO";
 
 export class Tetris {
   private readonly tablero: Tablero;
@@ -19,11 +19,11 @@ export class Tetris {
     this.reloj = new Reloj();
     this.tablero = new Tablero(this.reloj);
     this.linesToFinish = linesToFinish;
-    this.currentState = "NOT_STARTED";
+    this.currentState = "No iniciado";
   }
 
   public start(): void {
-    this.currentState = "PLAYING";
+    this.currentState = "JUGANDO";
     this.spawnRandomPiece();
   }
 
@@ -32,7 +32,7 @@ export class Tetris {
   }
 
   public tick(): void {
-    if (this.currentState !== "PLAYING") return;
+    if (this.currentState !== "JUGANDO") return;
 
     this.reloj.tick();
 
@@ -44,18 +44,18 @@ export class Tetris {
     }
 
     if (this.tablero.isGameOver() || this.tablero.lineCount() >= this.linesToFinish) {
-      this.currentState = "FINISHED";
+      this.currentState = "FINALIZADO";
     }
   }
 
   public rotateLeft(): void {
-    if (this.currentState === "PLAYING") {
+    if (this.currentState === "JUGANDO") {
       this.tablero.rotateLeft();
     }
   }
 
   public rotateRight(): void {
-    if (this.currentState === "PLAYING") {
+    if (this.currentState === "JUGANDO") {
       this.tablero.rotateRight();
     }
   }
@@ -72,7 +72,7 @@ export class Tetris {
     const piece = this.createRandomPiece();
     const added = this.tablero.addPiece(piece);
     if (!added) {
-      this.currentState = "FINISHED";
+      this.currentState = "FINALIZADO";
     }
   }
 
