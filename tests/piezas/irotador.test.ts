@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { IRotator } from "../../src/pieces/irotador";
-import { PieceT } from "../../src/pieces/piezat";
-import { PieceSquare } from "../../src/pieces/piezacuadrado";
-import { PieceStick } from "../../src/pieces/piezapalito";
-import { PieceL } from "../../src/pieces/piezal";
-import { PieceDog } from "../../src/pieces/piezaperro";
+import { IRotator } from "../../tetris/src/piezas/Irotador";
+import { PieceT } from "../../tetris/src/piezas/piezat";
+import { PieceSquare } from "../../tetris/src/piezas/piezacuadrado";
+import { PieceStick } from "../../tetris/src/piezas/piezapalito";
+import { PieceL } from "../../tetris/src/piezas/piezal";
+import { PieceDog } from "../../tetris/src/piezas/piezaperro";
 
 describe("IRotator", () => {
   it("todas las piezas del juego implementan rotateLeft y rotateRight", () => {
