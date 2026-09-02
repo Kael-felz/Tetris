@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PieceT } from "../../src/pieces/piezat";
+import { PieceT } from "../../tetris/src/piezas/piezat";
 
 describe("PieceT", () => {
   it("tiene la forma inicial correcta (T)", () => {
