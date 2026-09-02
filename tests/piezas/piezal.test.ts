@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PieceL } from "../tetris/src/piezas/piezal";
+import { PieceL } from "../../tetris/src/piezas/piezal";
 
 describe("PieceL", () => {
   it("crea la variante izquierda con la forma esperada", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PieceDog } from "../../src/pieces/piezaperro";
+import { PieceDog } from "../../tetris/src/piezas/piezaperro";
 
 describe("PieceDog", () => {
   it("crea la variante izquierda con la forma esperada", () => {
