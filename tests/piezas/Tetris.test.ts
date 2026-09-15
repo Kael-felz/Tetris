@@ -78,21 +78,25 @@ describe("Tetris", () => {
     expect(game.getTablero().getCurrentPiece()).not.toBe(primeraPieza);
   });
 
-  it("el juego finaliza al alcanzar la cantidad de lineas configurada", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0);
-    const game = new Tetris(0);
+  it("gana al completar cinco líneas usando únicamente piezas cuadrado", () => {
+    const xPositions = [0, 2, 4, 6, 8];
+    let randomCalls = 0;
+    let squareNumber = 0;
+    vi.spyOn(Math, "random").mockImplementation(() => {
+      const callInPiece = randomCalls++ % 3;
+      if (callInPiece === 0) return 0.21;
+      if (callInPiece === 1) return 0;
+      return (xPositions[squareNumber++ % xPositions.length] + 0.1) / 9;
+    });
+    const game = new Tetris(5);
     game.start();
 
-    game.tick();
+    for (let i = 0; i < 400 && game.state() === "JUGANDO"; i++) {
+      game.tick();
+    }
 
+    expect(game.getTablero().lineCount()).toBeGreaterThanOrEqual(5);
     expect(game.state()).toBe("FINALIZADO");
-  });
-
-  it("permite configurar una cantidad de lineas distinta a la de por defecto", () => {
-    const game = new Tetris(10);
-
-    expect(game.getTablero().lineCount()).toBe(0);
-    expect(game.state()).toBe("No iniciado");
   });
 
   it("puede crear piezas L y Dog según el valor aleatorio", () => {

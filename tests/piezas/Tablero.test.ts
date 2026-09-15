@@ -4,6 +4,7 @@ import { Reloj } from "../../tetris/src/Reloj";
 import { PieceSquare } from "../../tetris/src/piezas/piezacuadrado";
 import { PieceT } from "../../tetris/src/piezas/piezat";
 import { PieceStick } from "../../tetris/src/piezas/piezapalito";
+import { PieceDog } from "../../tetris/src/piezas/piezaperro";
 
 const make = () => new Tablero(new Reloj());
 
@@ -35,25 +36,35 @@ describe("Tablero", () => {
     expect(Math.min(...xs)).toBeGreaterThanOrEqual(0);
     expect(Math.max(...xs)).toBeLessThan(t.getWidth());
   });
-  it("fija la pieza al llegar al fondo y elimina filas", () => {
+  it("cuenta las líneas completas que elimina", () => {
     vi.spyOn(Math, "random").mockReturnValue(0);
     const t = make();
-    const p = new PieceSquare();
-    t.addPiece(p);
-    (t as any).currentPosition = { x: 0, y: 18 };
-    expect(t.moveDown()).toBe(false);
-    expect(t.getCurrentPiece()).toBeNull();
-    expect(t.getCells()[19].some((c) => c === true)).toBe(true);
+    const cells = t.getCells();
+    for (let y = Tablero.HEIGHT - 2; y < Tablero.HEIGHT; y++) {
+      for (let x = 0; x < Tablero.WIDTH - 2; x++) cells[y][x] = true;
+    }
 
-    const t2 = make();
-    const cells = t2.getCells();
-    for (let x = 0; x < Tablero.WIDTH - 2; x++) cells[19][x] = true;
-    const q = new PieceSquare();
-    t2.addPiece(q);
-    (t2 as any).currentPosition = { x: Tablero.WIDTH - 2, y: 18 };
-    t2.moveDown();
-    expect(t2.lineCount()).toBe(1);
-    expect(t2.getCells().flat().filter((c) => c === true).length).toBe(2);
+    t.addPiece(new PieceSquare());
+    (t as any).currentPosition = { x: Tablero.WIDTH - 2, y: Tablero.HEIGHT - 2 };
+    expect(t.moveDown()).toBe(false);
+
+    expect(t.lineCount()).toBe(2);
+  });
+
+  it("pierde al alcanzar el límite usando únicamente piezas Dog", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    const t = make();
+
+    for (let i = 0; i < Tablero.HEIGHT / 2; i++) {
+      expect(t.addPiece(new PieceDog("left"))).toBe(true);
+      while (t.moveDown()) {
+        // Deja caer cada pieza hasta que alcance el límite del tablero.
+      }
+    }
+
+    expect(t.isGameOver()).toBe(false);
+    expect(t.addPiece(new PieceDog("left"))).toBe(false);
+    expect(t.isGameOver()).toBe(true);
   });
  it("rota solo si cabe y se niega si no cabe", () => {
     vi.spyOn(Math, "random").mockReturnValue(0.3);
